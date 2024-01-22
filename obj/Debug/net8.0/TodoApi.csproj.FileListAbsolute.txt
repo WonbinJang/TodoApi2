@@ -511,3 +511,5 @@
 /Users/jang-wonbin/Desktop/React/WebApp/WebApp/TodoApi2/bin/Debug/net8.0/runtimes/win-x86/native/sni.dll
 /Users/jang-wonbin/Desktop/React/WebApp/WebApp/TodoApi2/bin/Debug/net8.0/runtimes/unix/lib/netcoreapp2.1/System.Data.SqlClient.dll
 /Users/jang-wonbin/Desktop/React/WebApp/WebApp/TodoApi2/bin/Debug/net8.0/runtimes/win/lib/netcoreapp2.1/System.Data.SqlClient.dll
+/Users/jang-wonbin/Desktop/React/WebApp/WebApp/TodoApi2/obj/Debug/net8.0/TodoApi.sourcelink.json
+/Users/jang-wonbin/Desktop/React/WebApp/WebApp/TodoApi2/bin/Debug/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll

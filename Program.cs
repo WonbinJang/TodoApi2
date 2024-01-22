@@ -1,7 +1,7 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore;
 using Microsoft.EntityFrameworkCore;
-
+using System.Security.Claims;
 using TodoApi.Models;
 /*
 using 지시문을 추가합니다.
@@ -15,7 +15,8 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<TodoContext>(opt =>
     opt.UseInMemoryDatabase("TodoList"));
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication("Bearer").AddJwtBearer();
 
 var app = builder.Build();
 
