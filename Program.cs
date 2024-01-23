@@ -18,6 +18,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication("Bearer").AddJwtBearer();
 
+var connectionString = builder.Configuration.GetConnectionString("default");
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

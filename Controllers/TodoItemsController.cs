@@ -3,15 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using TodoApi.Models;
 using Microsoft.Data.SqlClient;
 namespace TodoApi.Controllers;
-using System.Net;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Elfie.Diagnostics;
-using Microsoft.CodeAnalysis.FlowAnalysis;
-using NuGet.Protocol;
 
+// 종속성, Dedendency
+// 종속성 주입, Dependency Injection
 
 [Route("api/[controller]")]
 [ApiController]
@@ -23,7 +17,8 @@ public class TodoItemsController : ControllerBase
 
         public int status{get;set;}
     }
-    
+    // DbContext.ConnectionStrings
+    public SqlConnection conn = new SqlConnection("Server=localhost,1433;user=sa;pwd=LILvision12;database=TodoList;TrustServerCertificate=True;");
     public TodoItemsController(TodoContext context)
     {
         _context = context;
@@ -42,7 +37,7 @@ public class TodoItemsController : ControllerBase
     {
     
 //DATABASE_URL=“mysql://admin:memomemo!@memo.cxywos9kigxi.ap-northeast-2.rds.amazonaws.com:3306/memo?schema=public”
-        using(SqlConnection conn = new("Server=memo.cxywos9kigxi.ap-northeast-2.rds.amazonaws.com,3306;user=admin;pwd=memomemo!;database=memo;"))
+        using(conn)
         {
             conn.Open();
            SqlCommand cmd = new(@"
@@ -59,7 +54,7 @@ public class TodoItemsController : ControllerBase
     [HttpGet("Backlogs")]
     public IActionResult GetBacklogs()
     { 
-       using (SqlConnection conn = new("Server=localhost,1433;user=sa;pwd=LILvision12;database=TodoList;TrustServerCertificate=True;"))
+       using (conn)
         {
             conn.Open();
             SqlCommand cmd = new(@"
@@ -68,20 +63,34 @@ public class TodoItemsController : ControllerBase
                 FROM todo 
                 where disabledAt is null AND status = 1
             ", conn);
-
-            //cmd.Parameters.AddWithValue("@ownerId", ownerId);
-            
-            var todos = new List<TodoTitle>();
+var todos = new List<TodoItem>();
             using (SqlDataReader reader = cmd.ExecuteReader()){
-            while(reader.Read()){
-                    todos.Add(new TodoTitle{
+
+                while(reader.Read()){
+
+                if(reader["DisabledAt"]==System.DBNull.Value){
+                todos.Add(new TodoItem{
                     Id = Convert.ToInt32(reader["id"]),
                     Title = reader["title"].ToString(),
+                    Description = reader["description"].ToString(),
+                    Status = Convert.ToInt32(reader["status"]),
+                    CreatedAt = Convert.ToDateTime(reader["createdAt"]),
+                    });
+                }else if(reader["DisabledAt"]!=System.DBNull.Value){
+                todos.Add(new TodoItem{
+                    Id = Convert.ToInt32(reader["id"]),
+                    Title = reader["title"].ToString(),
+                    Description = reader["description"].ToString(),
+                    Status = Convert.ToInt32(reader["status"]),
+                    CreatedAt = Convert.ToDateTime(reader["createdAt"]),
+                    DisabledAt = Convert.ToDateTime(reader["disabledAt"]),
                 });
-                }
-            }
-            return Ok(todos);
-            }
+            }//if~elseif
+            
+         }//while
+        } //using SqlReader
+        return Ok(todos);
+        }//using SqlConnection
             
             
          }
@@ -89,7 +98,7 @@ public class TodoItemsController : ControllerBase
     [HttpGet("Todo")]
     public IActionResult GetTodos()
     { 
-       using (SqlConnection conn = new("Server=localhost,1433;user=sa;pwd=LILvision12;database=TodoList;TrustServerCertificate=True;")){
+       using (conn){
             conn.Open();
             SqlCommand cmd = new(@"
                 SELECT
@@ -98,26 +107,41 @@ public class TodoItemsController : ControllerBase
                 where disabledAt is null AND status = 2
             ", conn);
 
-            //cmd.Parameters.AddWithValue("@ownerId", ownerId);
-            
-            var todos = new List<TodoTitle>();
+            var todos = new List<TodoItem>();
             using (SqlDataReader reader = cmd.ExecuteReader()){
-            while(reader.Read()){
-                    todos.Add(new TodoTitle{
+
+                while(reader.Read()){
+
+                if(reader["DisabledAt"]==System.DBNull.Value){
+                todos.Add(new TodoItem{
                     Id = Convert.ToInt32(reader["id"]),
                     Title = reader["title"].ToString(),
+                    Description = reader["description"].ToString(),
+                    Status = Convert.ToInt32(reader["status"]),
+                    CreatedAt = Convert.ToDateTime(reader["createdAt"]),
+                    });
+                }else if(reader["DisabledAt"]!=System.DBNull.Value){
+                todos.Add(new TodoItem{
+                    Id = Convert.ToInt32(reader["id"]),
+                    Title = reader["title"].ToString(),
+                    Description = reader["description"].ToString(),
+                    Status = Convert.ToInt32(reader["status"]),
+                    CreatedAt = Convert.ToDateTime(reader["createdAt"]),
+                    DisabledAt = Convert.ToDateTime(reader["disabledAt"]),
                 });
-                }
-            }
-            return Ok(todos);
-            }  
+            }//if~elseif
+            
+         }//while
+        } //using SqlReader
+        return Ok(todos);
+        }//using SqlConnection
             
        }
     
     [HttpGet("Doing")]
     public IActionResult GetProgress()
     { 
-       using (SqlConnection conn = new("Server=localhost,1433;user=sa;pwd=LILvision12;database=TodoList;TrustServerCertificate=True;"))
+       using (conn)
         {
             conn.Open();
             SqlCommand cmd = new(@"
@@ -126,20 +150,34 @@ public class TodoItemsController : ControllerBase
                 FROM todo 
                 where disabledAt is null AND status = 3
             ", conn);
-
-            //cmd.Parameters.AddWithValue("@ownerId", ownerId);
-            
-            var todos = new List<TodoTitle>();
+var todos = new List<TodoItem>();
             using (SqlDataReader reader = cmd.ExecuteReader()){
-            while(reader.Read()){
-                    todos.Add(new TodoTitle{
+
+                while(reader.Read()){
+
+                if(reader["DisabledAt"]==System.DBNull.Value){
+                todos.Add(new TodoItem{
                     Id = Convert.ToInt32(reader["id"]),
                     Title = reader["title"].ToString(),
+                    Description = reader["description"].ToString(),
+                    Status = Convert.ToInt32(reader["status"]),
+                    CreatedAt = Convert.ToDateTime(reader["createdAt"]),
+                    });
+                }else if(reader["DisabledAt"]!=System.DBNull.Value){
+                todos.Add(new TodoItem{
+                    Id = Convert.ToInt32(reader["id"]),
+                    Title = reader["title"].ToString(),
+                    Description = reader["description"].ToString(),
+                    Status = Convert.ToInt32(reader["status"]),
+                    CreatedAt = Convert.ToDateTime(reader["createdAt"]),
+                    DisabledAt = Convert.ToDateTime(reader["disabledAt"]),
                 });
-                }
-            }
-            return Ok(todos);
-            }
+            }//if~elseif
+            
+         }//while
+        } //using SqlReader
+        return Ok(todos);
+        }//using SqlConnection
             
             
         }
@@ -147,7 +185,7 @@ public class TodoItemsController : ControllerBase
     [HttpGet("Done")]
     public IActionResult GetDones()
     { 
-       using (SqlConnection conn = new("Server=localhost,1433;user=sa;pwd=LILvision12;database=TodoList;TrustServerCertificate=True;"))
+       using (conn)
         {
             conn.Open();
             SqlCommand cmd = new(@"
@@ -156,27 +194,53 @@ public class TodoItemsController : ControllerBase
                 FROM todo 
                 where disabledAt is null AND status = 4
             ", conn);
-
-            //cmd.Parameters.AddWithValue("@ownerId", ownerId);
-            
-            var todos = new List<TodoTitle>();
+var todos = new List<TodoItem>();
             using (SqlDataReader reader = cmd.ExecuteReader()){
-                    while(reader.Read()){
-                    todos.Add(new TodoTitle{
+
+                while(reader.Read()){
+
+                if(reader["DisabledAt"]==System.DBNull.Value){
+                todos.Add(new TodoItem{
                     Id = Convert.ToInt32(reader["id"]),
                     Title = reader["title"].ToString(),
+                    Description = reader["description"].ToString(),
+                    Status = Convert.ToInt32(reader["status"]),
+                    CreatedAt = Convert.ToDateTime(reader["createdAt"]),
                     });
-            }           
+                }else if(reader["DisabledAt"]!=System.DBNull.Value){
+                todos.Add(new TodoItem{
+                    Id = Convert.ToInt32(reader["id"]),
+                    Title = reader["title"].ToString(),
+                    Description = reader["description"].ToString(),
+                    Status = Convert.ToInt32(reader["status"]),
+                    CreatedAt = Convert.ToDateTime(reader["createdAt"]),
+                    DisabledAt = Convert.ToDateTime(reader["disabledAt"]),
+                });
+            }//if~elseif
+            
+         }//while
+        } //using SqlReader
+        return Ok(todos);
+        }//using SqlConnection
+
+    //         var todos = new List<TodoTitle>();
+    //         using (SqlDataReader reader = cmd.ExecuteReader()){
+    //                 while(reader.Read()){
+    //                 todos.Add(new TodoTitle{
+    //                 Id = Convert.ToInt32(reader["id"]),
+    //                 Title = reader["title"].ToString(),
+    //                 });
+    //         }           
                 
-        }//SqlReader
-             return Ok(todos);     
-    }
+    //     }//SqlReader
+    //          return Ok(todos);     
+    // }
    
 }
     
      [HttpGet("{id}")]
      public IActionResult GetDescription(int id){
-        using (SqlConnection conn = new("Server=localhost,1433;user=sa;pwd=LILvision12;database=TodoList;TrustServerCertificate=True;")){
+        using (conn){
             conn.Open();
             SqlCommand cmd = new(@"
                 SELECT
@@ -220,7 +284,7 @@ public class TodoItemsController : ControllerBase
     [HttpDelete("{id}")]
      public IActionResult DeleteTodoItem(int id)
      {
-        using (SqlConnection conn = new("Server=localhost,1433;user=sa;pwd=LILvision12;database=TodoList;TrustServerCertificate=True;")){
+        using (conn){
             conn.Open();
             // SqlCommand cmd = new(@"
             //     DELETE
@@ -246,7 +310,7 @@ public class TodoItemsController : ControllerBase
      public IActionResult PutItem(string title, string description,int status)
      {
         // 여기서 json 파싱해서 값 변수에 넣어줘야함
-        using (SqlConnection conn = new("Server=localhost,1433;user=sa;pwd=LILvision12;database=TodoList;TrustServerCertificate=True;")){
+        using (conn){
             conn.Open();
             SqlCommand cmd = new(@"
                 INSERT INTO  TodoList.dbo.todo 
@@ -271,7 +335,7 @@ public class TodoItemsController : ControllerBase
      public IActionResult UpdateItem([FromBody] TodoItemUpdateDto param)
      {Console.WriteLine("{0}",param.Title);
         // 여기서 json 파싱해서 값 변수에 넣어줘야함
-        using (SqlConnection conn = new("Server=localhost,1433;user=sa;pwd=LILvision12;database=TodoList;TrustServerCertificate=True;")){
+        using (conn){
             conn.Open();
             SqlCommand cmd = new(@"
                 UPDATE TodoList.dbo.todo 
@@ -298,7 +362,7 @@ public class TodoItemsController : ControllerBase
      {
         
         // 여기서 json 파싱해서 값 변수에 넣어줘야함
-        using (SqlConnection conn = new("Server=localhost,1433;user=sa;pwd=LILvision12;database=TodoList;TrustServerCertificate=True;")){
+        using (conn){
             conn.Open();
             SqlCommand cmd = new(@"
                 INSERT INTO  TodoList.dbo.user 
@@ -319,22 +383,23 @@ public class TodoItemsController : ControllerBase
     [HttpPost("user/login")]
      public IActionResult SignIn([FromBody] User param){
         
-        using (SqlConnection conn = new("Server=localhost,1433;user=sa;pwd=LILvision12;database=TodoList;TrustServerCertificate=True;")){
+        using (conn){
             conn.Open();
             SqlCommand cmd = new(@"
                 SELECT
-                hashPassword
+                *
                 FROM TodoList.dbo.[user]
                 WHERE userName = @userName
             ", conn);
             cmd.Parameters.Add(new SqlParameter("@userName",System.Data.SqlDbType.VarChar));
+            
             cmd.Parameters["@userName"].Value=param.userName;
            
             using (SqlDataReader reader = cmd.ExecuteReader()){
-                reader.Read();
-                Console.WriteLine("{0}",param.Password);
+              reader.Read();
+               
                 if(reader["hashPassword"].ToString()==param.Password){
-                        return Ok("로그인 하였습니다.");
+                        return Ok(param.userName);
                 }else{
                     return StatusCode(400);
                 }
@@ -343,13 +408,13 @@ public class TodoItemsController : ControllerBase
         }
         
     }  
-    
+  
     [HttpPost("statusTodo/{id}")]
      public IActionResult ChangeStatus(int id){
         
         
         // 여기서 json 파싱해서 값 변수에 넣어줘야함
-        using (SqlConnection conn = new("Server=localhost,1433;user=sa;pwd=LILvision12;database=TodoList;TrustServerCertificate=True;")){
+        using (conn){
             conn.Open();
             SqlCommand cmd = new(@"
                 UPDATE TodoList.dbo.todo 
@@ -372,7 +437,7 @@ public class TodoItemsController : ControllerBase
      public IActionResult ChangeStatusD(int id){
         Console.WriteLine("첫줄{0},",id);
         // 여기서 json 파싱해서 값 변수에 넣어줘야함
-        using (SqlConnection conn = new("Server=localhost,1433;user=sa;pwd=LILvision12;database=TodoList;TrustServerCertificate=True;")){
+        using (conn){
             conn.Open();
             SqlCommand cmd = new(@"
                 UPDATE TodoList.dbo.todo 
@@ -395,7 +460,7 @@ public class TodoItemsController : ControllerBase
      public IActionResult ChangeStatusDone(int id){
         Console.WriteLine("첫줄{0}",id);
         // 여기서 json 파싱해서 값 변수에 넣어줘야함
-        using (SqlConnection conn = new("Server=localhost,1433;user=sa;pwd=LILvision12;database=TodoList;TrustServerCertificate=True;")){
+        using (conn){
             conn.Open();
             SqlCommand cmd = new(@"
                 UPDATE TodoList.dbo.todo 
@@ -417,22 +482,25 @@ public class TodoItemsController : ControllerBase
 
      [HttpPost("status")]
      public IActionResult ChangeStatus([FromBody]TodoStatus param){
-        Console.WriteLine("첫줄{0}",param.Id);
+       
         // 여기서 json 파싱해서 값 변수에 넣어줘야함
-        using (SqlConnection conn = new("Server=localhost,1433;user=sa;pwd=LILvision12;database=TodoList;TrustServerCertificate=True;")){
+        using (conn){
             conn.Open();
             SqlCommand cmd = new(@"
                 UPDATE TodoList.dbo.todo 
                 SET
-                status=@status
+                status=@status,
+                ownerId=@user_Id,
                 WHERE id = @id
             ", conn);
             
             cmd.Parameters.Add(new SqlParameter("@id",System.Data.SqlDbType.Int));
             cmd.Parameters.Add(new SqlParameter("@status",System.Data.SqlDbType.Int));
-            
+            cmd.Parameters.Add(new SqlParameter("@ownerId",System.Data.SqlDbType.Int));
+
             cmd.Parameters["@id"].Value=param.Id;
             cmd.Parameters["@status"].Value=param.Status;
+            cmd.Parameters["@user_Id"].Value=param.ownerId;
             cmd.ExecuteNonQuery();
                 
         }
