@@ -3,6 +3,8 @@ using Microsoft.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TodoApi.Models;
+using Microsoft.Build.Framework;
+using Microsoft.AspNetCore.Cors;
 /*
 using 지시문을 추가합니다.
 DI 컨테이너에 데이터베이스 컨텍스트를 추가합니다.
@@ -10,28 +12,33 @@ DI 컨테이너에 데이터베이스 컨텍스트를 추가합니다.
 */
 
 var builder = WebApplication.CreateBuilder(args);
+var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-builder.Services.AddControllers();
 builder.Services.AddDbContext<TodoContext>(opt =>
     opt.UseInMemoryDatabase("TodoList"));
 builder.Services.AddSwaggerGen();
 builder.Services.AddAuthorization();
-builder.Services.AddAuthentication("Bearer").AddJwtBearer();
 
+// builder.Services.AddCors(p => p.AddPolicy("corsapp",builder=>{
+//     builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+// }));
+
+
+builder.Services.AddControllers();
 var connectionString = builder.Configuration.GetConnectionString("default");
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
 
-app.UseHttpsRedirection();
+
+app.UseStaticFiles();
+app.UseRouting();
 
 app.UseAuthorization();
 
 app.MapControllers();
 
+// app.UseCors("corsapp");
 app.Run();

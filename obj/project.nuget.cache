@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "dGPUrNQd1NH2bcIn0B+8WDnLV0ZdrwlgqRfuZg7aBTVyRIkv8uyq47wbYkKw7+ueIJnjtu5RMYKhBtayDBuvYw==",
+  "dgSpecHash": "dG6OcCbji3dvDNCdi/WJbuxfRoaWty7scghbUUjL2RyF5IuQ2lkbzmiPs9vmEywadIosTfzJMeCyel1U6KP6rA==",
   "success": true,
   "projectFilePath": "/Users/jang-wonbin/Desktop/React/WebApp/WebApp/TodoApi2/TodoApi.csproj",
   "expectedPackageFiles": [
@@ -61,6 +61,7 @@
     "/Users/jang-wonbin/.nuget/packages/microsoft.aspnetcore.authentication.cookies/2.2.0/microsoft.aspnetcore.authentication.cookies.2.2.0.nupkg.sha512",
     "/Users/jang-wonbin/.nuget/packages/microsoft.aspnetcore.authentication.core/2.2.0/microsoft.aspnetcore.authentication.core.2.2.0.nupkg.sha512",
     "/Users/jang-wonbin/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/8.0.1/microsoft.aspnetcore.authentication.jwtbearer.8.0.1.nupkg.sha512",
+    "/Users/jang-wonbin/.nuget/packages/microsoft.aspnetcore.cors/2.2.0/microsoft.aspnetcore.cors.2.2.0.nupkg.sha512",
     "/Users/jang-wonbin/.nuget/packages/microsoft.aspnetcore.cryptography.internal/2.2.0/microsoft.aspnetcore.cryptography.internal.2.2.0.nupkg.sha512",
     "/Users/jang-wonbin/.nuget/packages/microsoft.aspnetcore.cryptography.keyderivation/2.2.0/microsoft.aspnetcore.cryptography.keyderivation.2.2.0.nupkg.sha512",
     "/Users/jang-wonbin/.nuget/packages/microsoft.aspnetcore.dataprotection/2.2.0/microsoft.aspnetcore.dataprotection.2.2.0.nupkg.sha512",
